@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  # Scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Scrape the service running on localhost:8080
+  - job_name: 'api-service'
+    static_configs:
+      - targets: ['locaohost:8080']

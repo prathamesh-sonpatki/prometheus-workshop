@@ -1,0 +1,9 @@
+# alert-rules.yml
+    groups:
+    - name: http_health
+      rules:
+      - alert: HttpSimulatorNotRunning
+        expr: absent(up{job="api-service"}) == 1
+        for: 1m
+        labels:
+          severity: major

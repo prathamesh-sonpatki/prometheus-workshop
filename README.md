@@ -64,7 +64,7 @@ scrape_configs:
   # Scrape the service running on localhost:8080
   - job_name: 'api-service'
     static_configs:
-      - targets: ['locaohost:8080']
+      - targets: ['locaohost:8080'] # For gitpod, this has to be gitpod host along with `scheme: https`
 ```
 
 ### Running Prometheus with updated configuration
@@ -73,7 +73,7 @@ scrape_configs:
 docker run -d \
   -p 9090:9090 \
   -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
-  prom/prometheus --web.enable-lifecycle
+  prom/prometheus --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
 ```
 
 ### Running HTTP Service
@@ -97,14 +97,27 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 - [ ] All requests with status 200 and endpoint `/login`.
 - [ ] First taste of aggregation, do a `sum` of all requests with status 200 and endpoint `/login`.
 - [ ] How do we get data for a range instead of a single timestamp? Range vector vs. instant vector.
-- [ ] Rate of change in the number of requests, use the `rate` function.
+- [ ] Rate of change in the number of requests.
+- [ ] Bytes allocated by Go for memstats. `go_memstats_alloc_bytes`
 - [ ] What's the overall request rate (with a 1 minute rolling-window)
 - [ ] How many requests per minute are errors?
 - [ ] What's the error rate (in %) of requests to the /users endpoint?
 - [ ] Top requested endpoints by status code
 
 
-## Milestone 6: Alerting 102
+## Milestone 6: Alerting
+
+``` yaml
+# alert-rules.yml
+    groups:
+    - name: http_health
+      rules:
+      - alert: HttpSimulatorNotRunning
+        expr: absent(up{job="api-service"}) == 1
+        for: 1m
+        labels:
+          severity: major
+```
 
 ``` yaml
 # prometheus.yml
@@ -122,35 +135,45 @@ scrape_configs:
 
 rule_files:
  - "/etc/prometheus/alert-rules.yml"
-
-alerting:
-  alertmanagers:
-  - static_configs:
-    - targets: ['localhost:9093']
 ```
 
-``` shel
-docker run -p 127.0.0.1:25:25 \
--e maildomain=yourdomain.com \
--e smtp_user=webmaster:secretpassword \
---name postfix -d catatnight/postfix
+``` shell
+docker run -d   -p 9090:9090   -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml   -v $(pwd)/alert-rules.yml:/etc/prometheus/alert-rules.yml prom/prometheus --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
 ```
+
+### Adding one more alert
 
 ``` yaml
-# alertmanager.yml
-global:
-  smtp_smarthost: '127.0.0.1:25'
-  smtp_from: 'webmaster@yourdomain.com'
-  smtp_auth_username: 'webmaster'
-  smtp_auth_password: 'secretpassword'
-
-route:
-  receiver: 'email-receiver'
-receivers:
-- name: 'email-receiver'
-  email_configs:
-  - to: 'prathamesh@last9.io'
+groups:
+    - name: http_health
+      rules:
+      - alert: HttpSimulatorNotRunning
+        expr: absent(up{job="api-service"}) == 1
+        for: 1m
+        labels:
+          severity: major
+      - alert: ErrorRateHigh
+        expr: sum(rate(http_requests_total{job="api-service", status="500"}[5m])) / sum(rate(http_requests_total{job="api-service"}[5m])) > 0.001
+        for: 1m
+        labels:
+          severity: major
+        annotations:
+          summary: Alert if error rate is high
+          description: Calculate error rate for this service and error out if high
 ```
+
+Reload Prometheus configuration with following command:
+
+``` shell
+curl -X POST :9090/-/reload
+```
+
+### Lab
+
+- [ ] Setup alert-rules
+- [ ] Verify alert rules are getting evalulated.
+- [ ] Add one more alert rule and reload config.
+- [ ] See alert rules turning green and red.
 
 ## Milestone 7: See with Grafana
 
@@ -171,6 +194,4 @@ docker run -d -p 3000:3000 grafana/grafana-oss
 - [ ] Graph % of requests fulfilling the SLO of 400ms for /login endpoint
 
 
-## Milestone 8: Advanced Topics: Relabeling
-
-## Milestone 9: Advanced Topics: Remote Write to Long Term Storage like Levitate
+## Milestone 8: Advanced Topics: Remote Write to Long Term Storage like Levitate
