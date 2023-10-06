@@ -1,5 +1,20 @@
 # prometheus-workshop
 
+## Resources
+
+- [Prometheus](https://prometheus.io/)
+- [What is Prometheus](https://last9.io/blog/what-is-prometheus/)
+- [Samples vs Metrics vs Cardinality](https://last9.io/blog/sample-vs-metrics-vs-cardinality/)
+- [PromQL Querying](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+- [Metric Types](https://last9.io/blog/prometheus-monitoring/#prometheus-metric-types)
+- [Prometheus and Grafana](https://last9.io/blog/prometheus-and-grafana/)
+- [What is High Cardinality](https://last9.io/blog/what-is-high-cardinality/)
+
+## Pre-requisites
+
+- [Docker setup](https://www.docker.com/get-started/)
+- If you don't have Docker setup, try [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/prathamesh-sonpatki/gitpod-starter)
+
 ## Milestone 1: Installing Prometheus
 
 ``` shell
