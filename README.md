@@ -12,6 +12,7 @@
 - [What is High Cardinality](https://last9.io/blog/what-is-high-cardinality/)
 - [Prometheus: Best Practices and Beastly Pitfalls](https://www.youtube.com/watch?v=_MNYuTNfTb4)
 - [Robust Perception Blog](https://www.robustperception.io/blog/)
+- [Sending Slack/PD/Email notifications with Alertmanager](https://grafana.com/blog/2020/02/25/step-by-step-guide-to-setting-up-prometheus-alertmanager-with-slack-pagerduty-and-gmail/)
 
 ## Pre-requisites
 
@@ -72,7 +73,7 @@ scrape_configs:
 docker run -d \
   -p 9090:9090 \
   -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
-  prom/prometheus
+  prom/prometheus --web.enable-lifecycle
 ```
 
 ### Running HTTP Service
@@ -104,6 +105,52 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 
 
 ## Milestone 6: Alerting 102
+
+``` yaml
+# prometheus.yml
+scrape_configs:
+  # Scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Scrape the service running on localhost:8080
+  - job_name: 'api-service'
+    static_configs:
+      - targets: ['localhost:8080']
+    scheme: https
+
+rule_files:
+ - "/etc/prometheus/alert-rules.yml"
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['localhost:9093']
+```
+
+``` shel
+docker run -p 127.0.0.1:25:25 \
+-e maildomain=yourdomain.com \
+-e smtp_user=webmaster:secretpassword \
+--name postfix -d catatnight/postfix
+```
+
+``` yaml
+# alertmanager.yml
+global:
+  smtp_smarthost: '127.0.0.1:25'
+  smtp_from: 'webmaster@yourdomain.com'
+  smtp_auth_username: 'webmaster'
+  smtp_auth_password: 'secretpassword'
+
+route:
+  receiver: 'email-receiver'
+receivers:
+- name: 'email-receiver'
+  email_configs:
+  - to: 'prathamesh@last9.io'
+```
 
 ## Milestone 7: See with Grafana
 
