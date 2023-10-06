@@ -1,0 +1,33 @@
+1. See all metrics and corresponding labels emitted by the HTTP service.
+- `{job="api-service"}`
+
+2. Let's look at the number of requests that this service has received since it started up.
+- `http_requests_total{job="api-service"}`
+
+3. All requests with status 200 and endpoint /login.
+- `http_requests_total{job="api-service", status="200", endpoint="/login"}`
+
+4. First taste of aggregation, do a sum of all requests with status 200 and endpoint /login.
+- `sum(http_requests_total{job="api-service", status="200", endpoint="/login"})`
+
+5. How do we get data for a range instead of a single timestamp? Range vector vs. instant vector.
+- `http_requests_total{job="api-service", status="200", endpoint="/login"}[5m]
+
+6. Rate of change in the number of requests.
+- rate(http_requests_total{job="api-service", status="200", endpoint="/login"}[5m])
+
+7. Bytes allocated by Go for memstats.
+- `go_memstats_alloc_bytes`
+- `avg_over_time(go_memstats_alloc_bytes[5m])`
+
+8. What's the overall request rate (with a 2 minute rolling-window)
+- `sum(rate(http_requests_total[2m]))`
+
+9. How many requests per minute are errors?
+- `sum(rate(http_requests_total{status="500"}[2m]))
+
+10. What's the error rate (in %) of requests to the /users endpoint?
+- `sum(rate(http_requests_total{status="500", endpoint="/login"}[2m])) / sum(rate(http_requests_total[2m])) * 100`
+
+11. Top requested endpoints by status code
+- `sum(rate(http_requests_total[2m])) by (endpoint)`
