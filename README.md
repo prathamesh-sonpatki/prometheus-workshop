@@ -6,9 +6,12 @@
 - [What is Prometheus](https://last9.io/blog/what-is-prometheus/)
 - [Samples vs Metrics vs Cardinality](https://last9.io/blog/sample-vs-metrics-vs-cardinality/)
 - [PromQL Querying](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+- [Querying Examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
 - [Metric Types](https://last9.io/blog/prometheus-monitoring/#prometheus-metric-types)
 - [Prometheus and Grafana](https://last9.io/blog/prometheus-and-grafana/)
 - [What is High Cardinality](https://last9.io/blog/what-is-high-cardinality/)
+- [Prometheus: Best Practices and Beastly Pitfalls](https://www.youtube.com/watch?v=_MNYuTNfTb4)
+- [Robust Perception Blog](https://www.robustperception.io/blog/)
 
 ## Pre-requisites
 
@@ -80,13 +83,46 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 
 ### Lab
 
-- [ ] **Exercise**: See all metrics exposed by the HTTP service.
+- [ ] See all metrics exposed by the HTTP service.
+- [ ] Verify that Prometheus is able to scrape metrics from HTTP service.
 
 ## Milestone 5: Monitoring an application
+
+### Lab
+
+- [ ] See all metrics and corresponding labels emitted by the HTTP service.
+- [ ] `up{job="api-service"}`
+- [ ] Let's look at the number of requests that this service has received since it started up.
+- [ ] All requests with status 200 and endpoint `/login`.
+- [ ] First taste of aggregation, do a `sum` of all requests with status 200 and endpoint `/login`.
+- [ ] How do we get data for a range instead of a single timestamp? Range vector vs. instant vector.
+- [ ] Rate of change in the number of requests, use the `rate` function.
+- [ ] What's the overall request rate (with a 1 minute rolling-window)
+- [ ] How many requests per minute are errors?
+- [ ] What's the error rate (in %) of requests to the /users endpoint?
+- [ ] Top requested endpoints by status code
+
 
 ## Milestone 6: Alerting 102
 
 ## Milestone 7: See with Grafana
+
+``` shell
+docker run -d -p 3000:3000 grafana/grafana-oss
+```
+
+### Lab
+
+- [ ] First visit to Grafana.
+- [ ] Adding a data source.
+- [ ] Create a dashboard.
+- [ ] Add all previous queries as panels.
+- [ ] Graph of latency distribution
+- [ ] Cumulative % graph of endpoint request rate
+- [ ] Memory usage over time
+- [ ] CPU usage over time
+- [ ] Graph % of requests fulfilling the SLO of 400ms for /login endpoint
+
 
 ## Milestone 8: Advanced Topics: Relabeling
 
