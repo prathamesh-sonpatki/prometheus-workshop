@@ -23,7 +23,7 @@ https://docs.google.com/presentation/d/1nfosNvuHAihk2Pe-U9RA6vEA89vnBre9h60GwYlJ
 ## Milestone 1: Installing Prometheus
 
 ``` shell
-docker run -p -d 9090:9090 prom/prometheus
+docker run -d -p 9090:9090 prom/prometheus
 ```
 
 ### Lab
