@@ -1,6 +1,6 @@
 # prometheus-workshop
 
-## Milestone 1: Installaing Prometheus
+## Milestone 1: Installing Prometheus
 
 ``` shell
 docker run -p -d 9090:9090 prom/prometheus
@@ -66,3 +66,13 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 ### Lab
 
 - [ ] **Exercise**: See all metrics exposed by the HTTP service.
+
+## Milestone 5: Monitoring an application
+
+## Milestone 6: Alerting 102
+
+## Milestone 7: See with Grafana
+
+## Milestone 8: Advanced Topics: Relabeling
+
+## Milestone 9: Advanced Topics: Remote Write to Long Term Storage like Levitate
