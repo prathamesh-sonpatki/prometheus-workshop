@@ -1,6 +1,7 @@
 # prometheus-workshop
 
-https://docs.google.com/presentation/d/1nfosNvuHAihk2Pe-U9RA6vEA89vnBre9h60GwYlJ_44/edit#slide=id.g24c2b28f524_0_79
+https://docs.google.com/presentation/d/1nfosNvuHAihk2Pe-U9RA6vEA89vnBre9h60GwYlJ_44/edit?usp=sharing
+
 ## Resources
 
 - [Prometheus](https://prometheus.io/)
