@@ -87,13 +87,13 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 ### Lab
 
 - [ ] See all metrics exposed by the HTTP service.
-- [ ] Verify that Prometheus is able to scrape metrics from HTTP service.
+- [ ] Verify that Prometheus can scrape metrics from HTTP service.
 
 ## Milestone 5: Monitoring an application
 
 ### Lab
 
-- [ ] See all metrics and corresponding labels emitted by the HTTP service.
+- [ ] See all metrics and corresponding labels the HTTP service emits.
 - [ ] `up{job="api-service"}`
 - [ ] Let's look at the number of requests that this service has received since it started up.
 - [ ] All requests with status 200 and endpoint `/login`.
@@ -101,10 +101,10 @@ docker run -d -p 8080:8080 pierrevincent/prom-http-simulator:0.1
 - [ ] How do we get data for a range instead of a single timestamp? Range vector vs. instant vector.
 - [ ] Rate of change in the number of requests.
 - [ ] Bytes allocated by Go for memstats. `go_memstats_alloc_bytes`
-- [ ] What's the overall request rate (with a 1 minute rolling-window)
+- [ ] What's the overall request rate (with a 1 minute rolling window)
 - [ ] How many requests per minute are errors?
 - [ ] What's the error rate (in %) of requests to the /users endpoint?
-- [ ] Top requested endpoints by status code
+- [ ] Top-requested endpoints by status code
 
 
 ## Milestone 6: Alerting
@@ -160,11 +160,11 @@ groups:
         labels:
           severity: major
         annotations:
-          summary: Alert if error rate is high
-          description: Calculate error rate for this service and error out if high
+          summary: Alert if the error rate is high
+          description: Calculate the error rate for this service and error out if high
 ```
 
-Reload Prometheus configuration with following command:
+Reload the Prometheus configuration with the following command:
 
 ``` shell
 curl -X POST :9090/-/reload
@@ -173,7 +173,7 @@ curl -X POST :9090/-/reload
 ### Lab
 
 - [ ] Setup alert-rules
-- [ ] Verify alert rules are getting evalulated.
+- [ ] Verify alert rules are getting evaluated.
 - [ ] Add one more alert rule and reload config.
 - [ ] See alert rules turning green and red.
 
@@ -196,4 +196,6 @@ docker run -d -p 3000:3000 grafana/grafana-oss
 - [ ] Graph % of requests fulfilling the SLO of 400ms for /login endpoint
 
 
-## Milestone 8: Advanced Topics: Remote Write to Long Term Storage like Levitate
+## Milestone 8: Advanced Topics: Remote Write to Long-Term Storage like Levitate
+
+- [ ] Sign up on https://app.last9.io/product/levitate
